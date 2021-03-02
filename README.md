@@ -1,3 +1,3 @@
 # DiscordGame
 
-Simple discord game in developement
+Simple discord game in development
