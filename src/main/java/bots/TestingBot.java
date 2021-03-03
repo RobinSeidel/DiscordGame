@@ -12,6 +12,7 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.reaction.ReactionEmoji;
+import discord4j.rest.util.Color;
 
 public class TestingBot {
 	private final Map<String, String> answers;
@@ -29,7 +30,6 @@ public class TestingBot {
 
 	public static void main(String[] args) {
 		TestingBot b = new TestingBot();
-
 		b.answers.entrySet().stream().forEach(entry -> {
 			b.client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
 					.map(message -> {
@@ -60,24 +60,23 @@ public class TestingBot {
 					.takeWhile(line -> !line.contains("#")).filter(line -> !line.equals(","))
 					.map(line -> line.split(",")).collect(Collectors.toMap(a1 -> a1[0], a1 -> a1[1]));
 			StringBuilder help = new StringBuilder();
-			Files.lines(Path.of("src/main/java/bots/BotReactions.csv"))
-			.skip(1)
-			.takeWhile(line -> !line.contains("#reactions"))
-			.filter(line->!line.equals(","))
-			.map(line->line.split(",")[0]).forEach(string->help.append(string+System.lineSeparator()));
+			Files.lines(Path.of("src/main/java/bots/BotReactions.csv")).skip(1)
+					.takeWhile(line -> !line.contains("#reactions")).filter(line -> !line.equals(","))
+					.map(line -> line.split(",")[0]).forEach(string -> help.append(string + System.lineSeparator()));
 			output.put("!help", help.toString());
 		} catch (IOException e) {
 			output = new HashMap<>();
 		}
-		
+
 		return output;
 	}
 
 	private static Map<String, String> loadReactions() {
 		try {
 			return Files.lines(Path.of("src/main/java/bots/BotReactions.csv"))
-					.dropWhile(line -> !line.contains("#reactions")).skip(1).takeWhile(line -> !line.contains("#")).filter(line -> !line.equals(","))
-					.map(line -> line.split(",")).collect(Collectors.toMap(a1 -> a1[0], a1 -> a1[1]));
+					.dropWhile(line -> !line.contains("#reactions")).skip(1).takeWhile(line -> !line.contains("#"))
+					.filter(line -> !line.equals(",")).map(line -> line.split(","))
+					.collect(Collectors.toMap(a1 -> a1[0], a1 -> a1[1]));
 		} catch (IOException e) {
 			return new HashMap<>();
 		}
