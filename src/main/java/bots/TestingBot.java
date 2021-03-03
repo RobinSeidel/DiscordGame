@@ -12,7 +12,6 @@ import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.reaction.ReactionEmoji;
-import discord4j.rest.util.Color;
 
 public class TestingBot {
 	private final Map<String, String> answers;
