@@ -1,23 +1,21 @@
 import discord4j.common.util.Snowflake;
-import discord4j.core.*;
+import discord4j.core.DiscordClientBuilder;
+import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.Role;
 import discord4j.core.object.entity.User;
-import discord4j.core.object.reaction.ReactionEmoji;
-
+import discord4j.core.object.entity.channel.VoiceChannel;
 
 public class TestBot{
     public static void main(String[] args){
-        System.out.println("Test");
-        GatewayDiscordClient client = DiscordClientBuilder.create("ODE2MjMxNTg2NTY2ODk3Njc0.YD385w.br69s25LUjx-SdMa5lsJ3IBqW4g")
+        GatewayDiscordClient client = DiscordClientBuilder.create("ODE2MjMxNTg2NTY2ODk3Njc0.YD385w.blC0wtWw41lCYqoz7nY-0FuYriE")
                 .build()
                 .login()
                 .block();
+
         client.getEventDispatcher().on(ReadyEvent.class)
                 .subscribe(event -> {
                     final User self = event.getSelf();
@@ -46,6 +44,17 @@ public class TestBot{
                 ReactionAddEvent.getMember().get().removeRole(Snowflake.of(816219559933247519L)).block();
             }
         });
+
+//        client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(MessageCreateEvent -> {
+//            if(MessageCreateEvent.getMessage().getContent().equals("!join")){
+//                ((VoiceChannel) client.getChannelById(Snowflake.of(816306786151301130L)).block()).join(spec -> spec.setProvider(null)).block();
+//                System.out.println("Received !join");
+//            }
+
+
+
+  //  });
+
         client.onDisconnect().block();
 
 
@@ -54,4 +63,3 @@ public class TestBot{
 
 
 }
-
