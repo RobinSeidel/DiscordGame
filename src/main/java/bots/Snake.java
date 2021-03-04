@@ -9,20 +9,20 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.reaction.ReactionEmoji;
+import static bots.Main.*;
 
 public class Snake {
-	private static GatewayDiscordClient client = DiscordClientBuilder.create("ODE2MjMxNTg2NTY2ODk3Njc0.YD385w.blC0wtWw41lCYqoz7nY-0FuYriE").build()
-			.login().block();
-	public static final ReactionEmoji UP = ReactionEmoji.unicode("⬆️");
-	public static final ReactionEmoji DOWN = ReactionEmoji.unicode("⬇️");
-	public static final ReactionEmoji LEFT = ReactionEmoji.unicode("⬅️");
-	public static final ReactionEmoji RIGHT = ReactionEmoji.unicode("➡️");
+
+	public static final ReactionEmoji UP = ReactionEmoji.unicode("\u2B06");
+	public static final ReactionEmoji DOWN = ReactionEmoji.unicode("\u2B07");
+	public static final ReactionEmoji LEFT = ReactionEmoji.unicode("\u2B05");
+	public static final ReactionEmoji RIGHT = ReactionEmoji.unicode("\u27A1");
 	private final char[][] spielFeld;
 	private Point pinguPos;
 	private int direction;
 	private final User player;
 
-	public Snake(User player,Message trigger) {	
+	public Snake(User player,Message trigger) {
 		spielFeld = new char[10][10];
 		for (char[] line : spielFeld)
 			Arrays.fill(line, ' ');
@@ -33,18 +33,20 @@ public class Snake {
 	}
 
 	public static void main(String[] args) {
+		System.out.println("Snake startet");
 		client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
 				.filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
 				.filter(message -> message.getContent().equalsIgnoreCase("!snake")).map(message -> {
+					System.out.println("Erreicht");
 					new Snake(message.getAuthor().get(),message);
 					return message;
 				}).subscribe();
-		
+
 		client.onDisconnect().block();
 	}
 
 	private Message startGame(Message message) {
-		message.addReaction(ReactionEmoji.unicode("🐍")).block();
+		message.addReaction(ReactionEmoji.unicode("\uD83D\uDC0D")).block();
 		Message[] game = new Message[1];
 		message.getChannel().map(channel -> {
 			game[0] = channel.createMessage("Welcome to the Game of snake").block();

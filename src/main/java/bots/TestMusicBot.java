@@ -1,3 +1,5 @@
+package bots;
+
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -7,24 +9,15 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
-import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
-import discord4j.core.event.domain.message.MessageEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.User;
-import discord4j.core.object.entity.channel.VoiceChannel;
-import discord4j.core.spec.VoiceChannelJoinSpec;
 import discord4j.voice.AudioProvider;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -51,7 +44,7 @@ public class TestMusicBot{
 // Create an AudioPlayer so Discord4J can receive audio data
         final AudioPlayer player = playerManager.createPlayer();
 
-// We will be creating LavaPlayerAudioProvider in the next step
+// We will be creating bots.LavaPlayerAudioProvider in the next step
         AudioProvider provider = new LavaPlayerAudioProvider(player);
 
         commands.put("join", event -> Mono.justOrEmpty(event.getMember())

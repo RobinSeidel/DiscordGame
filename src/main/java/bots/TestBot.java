@@ -6,10 +6,9 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.rest.util.Color;
+import static bots.Main.*;
 
 public class TestBot {
-	static final GatewayDiscordClient client = DiscordClientBuilder
-			.create("ODE2MjMxNTg2NTY2ODk3Njc0.YD385w.br69s25LUjx-SdMa5lsJ3IBqW4g").build().login().block();
 
 	public static void main(String[] args) {
 		System.out.println("Test");
