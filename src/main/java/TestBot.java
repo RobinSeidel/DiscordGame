@@ -4,11 +4,8 @@ import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.event.domain.message.ReactionAddEvent;
-import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.Role;
 import discord4j.core.object.entity.User;
-import discord4j.core.object.reaction.ReactionEmoji;
 
 
 public class TestBot{
