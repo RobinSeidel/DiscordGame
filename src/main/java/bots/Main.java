@@ -7,7 +7,7 @@ public class Main {
 			.login().block();
 
 	public static void main(String[] args) {
-		//new Thread(() -> TestingBot.main(null)).start();
+		new Thread(() -> TestingBot.main(null)).start();
 		new Thread(() -> Snake.main(null)).start();
 		new Thread(() -> ImageBot.main(null)).start();
 		new Thread(() -> TestMusicBot.main(null)).start();

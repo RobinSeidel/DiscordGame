@@ -1,10 +1,11 @@
 package bots;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
-import discord4j.core.DiscordClientBuilder;
-import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
@@ -19,17 +20,20 @@ public class Snake {
 	public static final ReactionEmoji RIGHT = ReactionEmoji.unicode("\u27A1");
 	private final char[][] spielFeld;
 	private Point pinguPos;
+	private final List<Point> body;
 	private int direction;
 	private final User player;
+	private Random randy = new Random();
 
-	public Snake(User player,Message trigger) {
+	public Snake(User player, Message trigger) {
 		spielFeld = new char[10][10];
 		for (char[] line : spielFeld)
 			Arrays.fill(line, ' ');
 		pinguPos = new Point(5, 5);
-		this.player=player;
+		this.player = player;
+		body = new ArrayList<>();
 		playGame(startGame(trigger));
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -38,7 +42,7 @@ public class Snake {
 				.filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
 				.filter(message -> message.getContent().equalsIgnoreCase("!snake")).map(message -> {
 					System.out.println("Erreicht");
-					new Snake(message.getAuthor().get(),message);
+					new Snake(message.getAuthor().get(), message);
 					return message;
 				}).subscribe();
 
@@ -61,6 +65,8 @@ public class Snake {
 			for (char pos : line)
 				switch (pos) {
 				case 'p' -> s.append(":penguin:");
+				case 'b' -> s.append(":white_circle:");
+				case 'a' -> s.append(":red_circle:");
 				case ' ' -> s.append(":black_circle:");
 				default -> s.append(":new_moon_with_face:");
 				}
@@ -75,38 +81,54 @@ public class Snake {
 		field.addReaction(UP).block();
 		field.addReaction(DOWN).block();
 		repaint(field);
-		while (true){
-			if(field.getReactors(RIGHT).any(user-> user.equals(player)).block()) {
+		while (true) {
+			if (field.getReactors(RIGHT).any(user -> user.equals(player)).block()) {
 				direction = 1;
 				field.removeReaction(RIGHT, player.getId()).block();
 			}
-			if(field.getReactors(UP).any(user-> user.equals(player)).block()) {
-				direction =2;
+			if (field.getReactors(UP).any(user -> user.equals(player)).block()) {
+				direction = 2;
 				field.removeReaction(UP, player.getId()).block();
 			}
-			if(field.getReactors(LEFT).any(user-> user.equals(player)).block()) {
+			if (field.getReactors(LEFT).any(user -> user.equals(player)).block()) {
 				direction = 3;
 				field.removeReaction(LEFT, player.getId()).block();
 			}
-			if(field.getReactors(DOWN).any(user-> user.equals(player)).block()) {
+			if (field.getReactors(DOWN).any(user -> user.equals(player)).block()) {
 				direction = 0;
 				field.removeReaction(DOWN, player.getId()).block();
 			}
 			try {
-			step();
-			} catch(ArrayIndexOutOfBoundsException e) {
+				step();
+			} catch (ArrayIndexOutOfBoundsException e) {
 				break;
 			}
 			repaint(field);
+			if (body.contains(pinguPos) && !body.get(0).equals(pinguPos))
+				break;
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
 			}
 		}
-		field.getChannel().flatMap(channel->channel.createMessage("GAME OVER")).block();
+		field.getChannel().flatMap(channel -> channel.createMessage("GAME OVER")).block();
+	}
+
+	private Point getRandomApplePos() {
+		Point apple;
+		do {
+			apple = new Point(randy.nextInt(spielFeld.length), randy.nextInt(spielFeld.length));
+		} while (body.contains(apple) || pinguPos.equals(apple));
+		return apple;
+	}
+
+	private void moveBody() {
+		body.add(0, new Point(pinguPos.x, pinguPos.y));
+		body.remove(body.size() - 1);
 	}
 
 	private void step() {
+		moveBody();
 		spielFeld[pinguPos.x][pinguPos.y] = ' ';
 		switch (direction) {
 		case 0 -> pinguPos.x++;
@@ -114,6 +136,14 @@ public class Snake {
 		case 2 -> pinguPos.x--;
 		case 3 -> pinguPos.y--;
 		}
+		if (spielFeld[pinguPos.x][pinguPos.y] == 'a') {
+			body.add(new Point(pinguPos.x, pinguPos.y));
+			Point apple = getRandomApplePos();
+			spielFeld[apple.x][apple.y] = 'a';
+		}
+		body.stream().forEach(point -> {
+			spielFeld[point.x][point.y] = 'b';
+		});
 		spielFeld[pinguPos.x][pinguPos.y] = 'p';
 	}
 
