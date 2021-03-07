@@ -53,11 +53,11 @@ public class TestingBot {
 	private static Map<String, String> loadAnswers() {
 		Map<String, String> output;
 		try {
-			output = Files.lines(Path.of("src/main/java/bots/BotReactions.csv")).skip(1)
+			output = Files.lines(Path.of("src/main/java/bots/data/BotReactions.csv")).skip(1)
 					.takeWhile(line -> !line.contains("#")).filter(line -> !line.equals(","))
 					.map(line -> line.split(",")).collect(Collectors.toMap(a1 -> a1[0], a1 -> a1[1]));
 			StringBuilder help = new StringBuilder();
-			Files.lines(Path.of("src/main/java/bots/BotReactions.csv")).skip(1)
+			Files.lines(Path.of("src/main/java/bots/data/BotReactions.csv")).skip(1)
 					.takeWhile(line -> !line.contains("#reactions")).filter(line -> !line.equals(","))
 					.map(line -> line.split(",")[0]).forEach(string -> help.append(string + System.lineSeparator()));
 			output.put("!help", help.toString());
@@ -70,7 +70,7 @@ public class TestingBot {
 
 	private static Map<String, String> loadReactions() {
 		try {
-			return Files.lines(Path.of("src/main/java/bots/BotReactions.csv"))
+			return Files.lines(Path.of("src/main/java/bots/data/BotReactions.csv"))
 					.dropWhile(line -> !line.contains("#reactions")).skip(1).takeWhile(line -> !line.contains("#"))
 					.filter(line -> !line.equals(",")).map(line -> line.split(","))
 					.collect(Collectors.toMap(a1 -> a1[0], a1 -> a1[1]));

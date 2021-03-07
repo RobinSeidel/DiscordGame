@@ -1,5 +1,6 @@
 package bots;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -28,5 +29,4 @@ public class ImageBot {
 			embed.setImage(bildReactions.get(message.getContent()));
 		})).subscribe();
 	}
-
 }
