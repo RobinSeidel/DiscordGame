@@ -20,9 +20,7 @@ public class TestingBot {
 
 	public TestingBot() {
 		answers = loadAnswers();
-		System.out.println(answers);
 		reactions = loadReactions();
-		System.out.println(reactions);
 		client = DiscordClientBuilder.create("ODE2MjMxNTg2NTY2ODk3Njc0.YD385w.blC0wtWw41lCYqoz7nY-0FuYriE").build()
 				.login().block();
 	}

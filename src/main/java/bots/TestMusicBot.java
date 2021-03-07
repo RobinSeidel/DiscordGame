@@ -8,17 +8,20 @@ import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBu
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.UserUpdateEvent;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
+import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.event.domain.message.ReactionAddEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.voice.AudioProvider;
+import discord4j.voice.VoiceConnection;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import javax.swing.text.StyleContext;
+import java.util.*;
 import java.util.function.Function;
 
 public class TestMusicBot{
@@ -33,18 +36,17 @@ public class TestMusicBot{
         // Creates AudioPlayer instances and translates URLs to AudioTrack instances
         final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
 
-// This is an optimization strategy that Discord4J can utilize.
-// It is not important to understand
+        // Optimization
         playerManager.getConfiguration()
                 .setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
 
-// Allow playerManager to parse remote sources like YouTube links
+        // Allow playerManager to parse remote sources like YouTube links
         AudioSourceManagers.registerRemoteSources(playerManager);
 
-// Create an AudioPlayer so Discord4J can receive audio data
+        // Create an AudioPlayer so Discord4J can receive audio data
         final AudioPlayer player = playerManager.createPlayer();
 
-// We will be creating bots.LavaPlayerAudioProvider in the next step
+        // We will be creating bots.LavaPlayerAudioProvider in the next step
         AudioProvider provider = new LavaPlayerAudioProvider(player);
 
         commands.put("join", event -> Mono.justOrEmpty(event.getMember())
@@ -66,26 +68,51 @@ public class TestMusicBot{
                 .login()
                 .block();
 
-        client.getEventDispatcher().on(MessageCreateEvent.class)
-                .flatMap(event -> Mono.just(event.getMessage().getContent())
-                        .flatMap(content -> Flux.fromIterable(commands.entrySet())
-                                // We will be using ! as our "prefix" to any command in the system.
-                                .filter(entry -> content.startsWith('!' + entry.getKey()))
-                                .flatMap(entry -> entry.getValue().apply(event))
-                                .next()))
-                .subscribe();
-
-        client.getEventDispatcher().on(VoiceStateUpdateEvent.class)
-                .filter(VoiceStateUpdateEvent::isJoinEvent)
-                .map(VoiceStateUpdateEvent::getCurrent)
-                .flatMap(VoiceState::getChannel)
-                .filter(voiceChannel -> voiceChannel.getId().equals(Snowflake.of("816436601500336168")))
-                .flatMap(channel -> {
-                    playerManager.loadItem("https://www.youtube.com/watch?v=dQw4w9WgXcQ",scheduler);
-                    return channel.join(spec -> spec.setProvider(provider));
+        commands.put("createChannel", event -> Mono.just(event.getMessage().getContent())
+                .map(content -> {
+                    System.out.println(content);
+                    return Arrays.asList(content.split(" "));
                 })
-                .then().block();
+                .doOnNext(command ->
+                        client.getGuildById(Snowflake.of("816218743565713459")).block().createVoiceChannel(spec -> {
+                            try{
+                                int size = Math.abs(Integer.parseInt(command.get(2))) <= 100 &&
+                                        Math.abs(Integer.parseInt(command.get(2))) > 0 ?
+                                        Math.abs(Integer.parseInt(command.get(2))) : 10;
+                                String name = command.get(1);
+                                spec.setName(name);
+                                spec.setUserLimit(size);
+                                spec.setParentId(Snowflake.of("817469237828255745"));
+                            }catch(IndexOutOfBoundsException | NumberFormatException e){
+                                System.out.println("Error wrong Format");
+                                event.getMessage().getChannel().flatMap(channel -> channel.createMessage("Wrong Format: use !createChannel <Name> <Size>")).block();
+                            }
+                        }).block()).then());
 
+
+        client.getEventDispatcher().on(MessageCreateEvent.class).
+                flatMap(event -> Mono.just(event.getMessage().
+                        getContent()).
+                        flatMap(content -> Flux.fromIterable(commands.entrySet()).
+                                // We will be using ! as our "prefix" to any command in the system..
+                                        filter(entry -> content.startsWith('!' + entry.getKey())).
+                                        flatMap(entry -> entry.getValue().apply(event)).
+                                        next())).subscribe();
+
+        client.getEventDispatcher().
+                on(VoiceStateUpdateEvent.class).
+                filter(VoiceStateUpdateEvent::isJoinEvent).
+                map(VoiceStateUpdateEvent::getCurrent).
+                filter(voiceState -> !voiceState.getMember().block().isBot()).
+                flatMap(VoiceState::getChannel).
+                filter(voiceChannel -> voiceChannel.getId().
+                        equals(Snowflake.of("816436601500336168"))).
+                flatMap(channel ->{
+                    playerManager.loadItem("https://www.youtube.com/watch?v=dQw4w9WgXcQ", scheduler);
+                    System.out.println("Someone joined Mozart Channel");
+                    return channel.join(voiceChannelJoinSpec -> voiceChannelJoinSpec.setProvider(provider));
+                })
+                .subscribe();
 
         client.onDisconnect().block();
     }

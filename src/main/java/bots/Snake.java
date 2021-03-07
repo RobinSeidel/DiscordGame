@@ -33,11 +33,9 @@ public class Snake {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Snake startet");
 		client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
 				.filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
 				.filter(message -> message.getContent().equalsIgnoreCase("!snake")).map(message -> {
-					System.out.println("Erreicht");
 					new Snake(message.getAuthor().get(),message);
 					return message;
 				}).subscribe();
