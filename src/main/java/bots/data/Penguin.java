@@ -29,11 +29,20 @@ public class Penguin {
 		return level;
 	}
 
+	/**
+	 * @return eine String repräsentierung mit der sich clean in die csv datei schreiben lässt
+	 */
+	String getInCsvFormat() {
+		return id + ", " + name + ", " + imageUrl + ", " + level;
+	}
+
+	/**
+	 * Autogenerierte toString methode, damit man beim debuggen checkt um welchen
+	 * atzen es sich handelt.
+	 */
 	@Override
 	public String toString() {
 		return "Penguin [name=" + name + ", id=" + id + ", level=" + level + ", imageUrl=" + imageUrl + "]";
 	}
-
-
 
 }
