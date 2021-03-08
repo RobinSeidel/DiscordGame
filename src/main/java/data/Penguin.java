@@ -1,10 +1,10 @@
 package data;
 
 public class Penguin {
-	private final String imageUrl;
 	private final String name;
 	private final long id;
 	private final int level;
+	private final String imageUrl;
 
 	public Penguin(long id, String name, String imageUrl, int level) {
 		this.id = id;
@@ -28,4 +28,12 @@ public class Penguin {
 	public int getLevel() {
 		return level;
 	}
+
+	@Override
+	public String toString() {
+		return "Penguin [name=" + name + ", id=" + id + ", level=" + level + ", imageUrl=" + imageUrl + "]";
+	}
+
+
+
 }
