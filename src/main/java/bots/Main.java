@@ -10,7 +10,7 @@ public class Main {
 		new Thread(() -> TestingBot.main(null)).start();
 		new Thread(() -> Snake.main(null)).start();
 		new Thread(() -> ImageBot.main(null)).start();
-		new Thread(() -> TestMusicBot.main(null)).start();
+		new Thread(() -> RandomSpawn.main(null)).start();
 	}
 
 }

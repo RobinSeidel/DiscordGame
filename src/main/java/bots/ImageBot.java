@@ -1,5 +1,6 @@
 package bots;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
