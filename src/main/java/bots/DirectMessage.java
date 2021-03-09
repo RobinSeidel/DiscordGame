@@ -2,6 +2,7 @@ package bots;
 
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
+import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.Channel;
 import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.entity.channel.VoiceChannel;
@@ -16,7 +17,7 @@ public class DirectMessage{
                 if(!event.isJoinEvent() && !event.isMoveEvent())
                     return;
                 event.getCurrent().getChannel().block().getVoiceStates().flatMap(voiceState -> voiceState.getMember())
-                        .doOnNext(System.out::println).subscribe();
+                        .collectList().block().contains();
             });
             client.onDisconnect().block();
     }
