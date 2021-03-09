@@ -54,4 +54,9 @@ public class Penguin {
 		return other.name == name && other.id == id && other.level == level && other.imageUrl == imageUrl;
 	}
 
+	@Override
+	public int hashCode() {
+		return Long.hashCode(id);
+	}
+
 }

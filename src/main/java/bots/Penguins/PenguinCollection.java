@@ -120,9 +120,7 @@ public class PenguinCollection {
 	public static void main(String args[]) throws InterruptedException {
 		PenguinCollection p = new PenguinCollection();
 		System.out.println(p.getCollection());
-		p.addPenguin(new Penguin(p.generateId(), "Skipper",
-				"https://static.wikia.nocookie.net/penguinsofmadagascar/images/f/fb/Skipper04.png/revision/latest?cb=20150111190159",
-				2));
+		
 		Thread.sleep(15000);
 		System.out.println(p.getCollection());
 	}
