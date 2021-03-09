@@ -17,8 +17,7 @@ public class ImageBot {
 			"stupid bot","https://media3.giphy.com/media/ZcW8zOfmu7pIdzOAWO/giphy.gif",
 			"fuck you bot", "https://media.tenor.com/images/16d0803b2f82c34d64518bd9b1289814/tenor.gif",
 			"$dance", "https://media1.giphy.com/media/eMOmLrDdmw520R8Sqw/giphy.gif",
-			"jesus christ", "https://media2.giphy.com/media/orUDTj9Q5TMzTdB892/giphy.gif",
-			"lola", "https://giffiles.alphacoders.com/211/211889.gif"
+			"jesus christ", "https://media2.giphy.com/media/orUDTj9Q5TMzTdB892/giphy.gif"
 			);
 	public static void main(String[] args) {
 		client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
