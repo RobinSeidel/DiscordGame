@@ -1,7 +1,5 @@
 package bots.musicHelper;
 
-import bots.musicHelper.LavaPlayerAudioProvider;
-import bots.musicHelper.TrackScheduler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;

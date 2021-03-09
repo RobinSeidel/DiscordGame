@@ -46,7 +46,7 @@ public class RandomSpawn{
                             client.getGuildById(Snowflake.of(816218743565713459L)).block().changeSelfNickname(client
                                     .getChannelById(Snowflake.of(channels[temp])).cast(VoiceChannel.class).block()
                                     .getName()).block();
-                            return voiceChannel.join(spec -> spec.setProvider(musicHandler.loadUrlAndPlay("https://www.youtube.com/watch?v=eBNcjvxLfFc",1)));
+                            return voiceChannel.join(spec -> spec.setProvider(musicHandler.loadUrlAndPlay("https://www.youtube.com/watch?v=vfc42Pb5RA8",10)));
                         }
                 ).subscribe();
 
