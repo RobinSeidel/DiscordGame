@@ -1,4 +1,4 @@
-package bots;
+package bots.funAdditions;
 import discord4j.core.*;
 import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;

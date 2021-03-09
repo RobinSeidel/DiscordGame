@@ -1,4 +1,4 @@
-package bots;
+package bots.funAdditions;
 
 import java.util.HashMap;
 import java.util.Map;

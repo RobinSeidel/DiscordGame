@@ -1,5 +1,6 @@
 package bots;
 
+import bots.funAdditions.ImageBot;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 public class Main {
@@ -11,6 +12,8 @@ public class Main {
 		new Thread(() -> Snake.main(null)).start();
 		new Thread(() -> ImageBot.main(null)).start();
 		new Thread(() -> RandomSpawn.main(null)).start();
+		new Thread(() -> RoleHandler.main(null)).start();
+		new Thread(() -> DirectMessage.main(null)).start();
 	}
 
 }
