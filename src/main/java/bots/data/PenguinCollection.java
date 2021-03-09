@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class PenguinCollection {
 	private final Map<Long, Penguin> collection;
 	public static final Path PINGU_PATH = Path.of("src/main/java/bots/data/penguins.csv");
-	private boolean updating;
 	private long nextId;
 
 	public PenguinCollection() {
@@ -19,11 +18,6 @@ public class PenguinCollection {
 		new Thread(() -> {
 			while (true) {
 				updateCollection();
-				try {
-					notifyAll();
-				} catch (Exception e) {
-					System.err.println(e.toString());
-				}
 				try {
 					Thread.sleep(10000);
 				} catch (InterruptedException ignore) {
@@ -69,7 +63,6 @@ public class PenguinCollection {
 	 * auf die Collection geschehen
 	 */
 	private synchronized void updateCollection() {
-		updating = true;
 		try (BufferedWriter writer = Files.newBufferedWriter(PINGU_PATH)) {
 			writer.write("Id, Name, ImageUrl, Level");
 			collection.entrySet().stream().map(entry -> entry.getValue()).forEach(pingu -> {
@@ -86,10 +79,9 @@ public class PenguinCollection {
 		} catch (IOException e) {
 			System.err.println(e.toString() + ". Could not access file!");
 		}
-		updating = false;
 	}
 
-	public synchronized Map<Long, Penguin> getCollection() {
+	public Map<Long, Penguin> getCollection() {
 		return collection;
 	}
 
@@ -102,12 +94,6 @@ public class PenguinCollection {
 	public synchronized boolean addPenguin(Penguin penguin) {
 		if (collection.containsKey(penguin.getId()))
 			return false;
-		while (updating) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-			}
-		}
 		collection.put(penguin.getId(), penguin);
 		return true;
 	}
