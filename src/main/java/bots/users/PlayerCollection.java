@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import bots.Main;
 import bots.Penguins.Penguin;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.User;
 
 public class PlayerCollection {
 	public static final Path USER_PATH = Path.of("src/main/java/bots/data/users.csv");
@@ -98,4 +100,17 @@ public class PlayerCollection {
 			System.err.println(e.toString() + ". Could not access file!");
 		}
 	}
+
+	public Player getPlayer(User user) {
+		return players.get(user.getId().asLong());
+	}
+	
+	public Player registerNewPlayer(User user) {
+		return players.put(user.getId().asLong(), new Player(user.getId().asLong()));
+	}
+	
+	public Player getPlayer(Member member) {
+		return players.get(member.getId().asLong());
+	}
+
 }

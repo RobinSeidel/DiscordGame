@@ -1,5 +1,7 @@
 package bots.Penguins;
 
+import static bots.Main.client;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +12,9 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.rest.util.Color;
 
 public class PenguinCollection {
 	private final Map<Long, Penguin> collection;
@@ -117,11 +122,22 @@ public class PenguinCollection {
 		return possiblePenguins.get(new Random().nextInt(possiblePenguins.size()));
 	}
 
-	public static void main(String args[]) throws InterruptedException {
+	public static void main(String args[]) {
 		PenguinCollection p = new PenguinCollection();
-		System.out.println(p.getCollection());
-		
-		Thread.sleep(15000);
+		client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
+				.filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+				.filter(message -> message.getContent().equalsIgnoreCase("!spawnPenguin")).map(message -> {
+					message.getChannel().block().createEmbed(embed -> {
+						Penguin randy = p.getRandomPenguin(3);
+						System.out.println("Spawning " + randy.getName());
+						embed.setColor(Color.DISCORD_BLACK);
+						embed.setTitle(randy.getName());
+						embed.setImage(randy.getImageUrl());
+					}).block();
+					return message;
+				}).subscribe();
+
+		client.onDisconnect().block();
 		System.out.println(p.getCollection());
 	}
 }
