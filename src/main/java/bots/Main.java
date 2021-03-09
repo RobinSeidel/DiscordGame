@@ -1,6 +1,6 @@
 package bots;
 
-import bots.data.EntertainerBot;
+import bots.funAdditions.EntertainerBot;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 
@@ -12,6 +12,7 @@ public class Main {
 		new Thread(() -> Snake.main(null)).start();
 		new Thread(() -> EntertainerBot.main(null)).start();
 		new Thread(() -> RandomSpawn.main(null)).start();
+		new Thread(() -> DirectMessage.main(null)).start();
 	}
 
 }

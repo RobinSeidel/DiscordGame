@@ -1,4 +1,4 @@
-package bots.data;
+package bots.Penguins;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

@@ -16,8 +16,8 @@ public class DirectMessage{
             client.getEventDispatcher().on(VoiceStateUpdateEvent.class).subscribe(event -> {
                 if(!event.isJoinEvent() && !event.isMoveEvent())
                     return;
-                event.getCurrent().getChannel().block().getVoiceStates().flatMap(voiceState -> voiceState.getMember())
-                        .collectList().block().contains();
+                System.out.println(event.getCurrent().getMember().block().getDisplayName());
+                event.getCurrent().getMember().block().getPrivateChannel().block().createMessage("Hallo").block();
             });
             client.onDisconnect().block();
     }

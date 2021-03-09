@@ -1,4 +1,4 @@
-package bots.data;
+package bots.funAdditions;
 
 import static bots.Main.*;
 

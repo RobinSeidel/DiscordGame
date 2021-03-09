@@ -1,4 +1,4 @@
-package bots.data;
+package bots.Penguins;
 
 public class Penguin {
 	private final String name;
