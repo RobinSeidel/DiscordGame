@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class PenguinCollection {
@@ -106,12 +109,20 @@ public class PenguinCollection {
 		return nextId++;
 	}
 
+	public Penguin getRandomPenguin(int level) {
+		List<Penguin> possiblePenguins = collection.entrySet().stream().map(entry -> entry.getValue())
+				.filter(pingu -> pingu.getLevel() == level).collect(Collectors.toList());
+		if (possiblePenguins.isEmpty())
+			throw new NoSuchElementException("No Penguin in Collection with Level: " + level);
+		return possiblePenguins.get(new Random().nextInt(possiblePenguins.size()));
+	}
+
 	public static void main(String args[]) throws InterruptedException {
 		PenguinCollection p = new PenguinCollection();
 		System.out.println(p.getCollection());
-		p.getCollection().put(2L, new Penguin(2, "Duke",
-				"https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Duke_%28Java_mascot%29_waving.svg/568px-Duke_%28Java_mascot%29_waving.svg.png",
-				10));
+		p.addPenguin(new Penguin(p.generateId(), "Skipper",
+				"https://static.wikia.nocookie.net/penguinsofmadagascar/images/f/fb/Skipper04.png/revision/latest?cb=20150111190159",
+				2));
 		Thread.sleep(15000);
 		System.out.println(p.getCollection());
 	}

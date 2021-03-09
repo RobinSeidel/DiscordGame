@@ -30,7 +30,8 @@ public class Penguin {
 	}
 
 	/**
-	 * @return eine String repräsentierung mit der sich clean in die csv datei schreiben lässt
+	 * @return eine String repräsentierung mit der sich clean in die csv datei
+	 *         schreiben lässt
 	 */
 	String getInCsvFormat() {
 		return id + ", " + name + ", " + imageUrl + ", " + level;
@@ -43,6 +44,14 @@ public class Penguin {
 	@Override
 	public String toString() {
 		return "Penguin [name=" + name + ", id=" + id + ", level=" + level + ", imageUrl=" + imageUrl + "]";
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Penguin))
+			return false;
+		Penguin other = (Penguin) obj;
+		return other.name == name && other.id == id && other.level == level && other.imageUrl == imageUrl;
 	}
 
 }
