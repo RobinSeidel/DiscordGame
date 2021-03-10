@@ -25,7 +25,7 @@ public class PlayerCollection {
 			while (true) {
 				updateCollection();
 				try {
-					Thread.sleep(10000);
+					Thread.sleep(10_000);
 				} catch (InterruptedException ignore) {
 				}
 			}

@@ -8,6 +8,7 @@ import bots.Penguins.Penguin;
 import discord4j.common.util.Snowflake;
 
 public class Player {
+
 	private final Map<Penguin, Integer> collectedPenguins;
 	private final Snowflake snowFlake;
 
