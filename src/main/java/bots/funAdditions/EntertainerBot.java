@@ -11,8 +11,12 @@ import java.util.stream.Collectors;
 
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.Message;
+import discord4j.core.object.entity.channel.Channel;
+import discord4j.core.object.entity.channel.GuildChannel;
+import discord4j.core.object.entity.channel.TextChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.rest.util.Color;
+import static bots.Snowflakes.*;
 
 public class EntertainerBot {
 	private final Map<String, String> imageReactions;
@@ -32,6 +36,7 @@ public class EntertainerBot {
 	public static void main(String[] args) {
 		EntertainerBot entertainer = new EntertainerBot();
 		client.getEventDispatcher().on(MessageCreateEvent.class).map(MessageCreateEvent::getMessage)
+				.filter(message -> !message.getChannel().cast(TextChannel.class).block().getCategory().block().getId().equals(GAMECHANNELS.getId()))
 				.filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false)).map(message -> {
 					entertainer.reactToMessage(message);
 					entertainer.commentOnMessage(message);
