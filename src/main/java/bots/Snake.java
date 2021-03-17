@@ -1,3 +1,4 @@
+/*
 package bots;
 
 import java.awt.Point;
@@ -151,3 +152,4 @@ public class Snake {
 		game.edit(m -> m.setContent(parseGame(spielFeld))).block();
 	}
 }
+*/
